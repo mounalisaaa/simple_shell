@@ -3,6 +3,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/wait.h>
+#include <stdbool.h>
 
 int main(void)
 {
@@ -12,17 +13,18 @@ int main(void)
 
 	char *token, **tokens = NULL;
 	const char *delim = " \t\n";
+	bool run = true;
 	int i = 0;
 
 	int status;
 	pid_t pid;
 
-	while (1)
+	while (run)
 	{
 		if (isatty(STDIN_FILENO))
 			printf("#cisfun$ ");
 		else
-			break;
+			run = false;
 		char_num = getline(&buffer, &buffer_size, stdin);
 		if (char_num == -1)
 		{
