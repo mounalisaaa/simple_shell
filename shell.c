@@ -4,15 +4,10 @@ int main(void)
 {
 	char *buffer = NULL;
 	size_t buffer_size = 0;
-	ssize_t char_num = 0;
-
 	char *token, **tokens = NULL;
 	const char *delim = " \t\n";
 	bool run = true;
 	int i = 0;
-
-	int status;
-	pid_t pid;
 
 	while (run)
 	{
@@ -20,8 +15,7 @@ int main(void)
 			printf("#cisfun$ ");
 		else
 			run = false;
-		char_num = getline(&buffer, &buffer_size, stdin);
-		if (char_num == -1)
+		if ((getline(&buffer, &buffer_size, stdin)) == -1)
 		{
 			perror("getline");
 			free(buffer);
@@ -41,31 +35,11 @@ int main(void)
 			token = strtok(NULL, delim);
 			i++;
 		}
-		pid = fork();
-		if (pid == -1)
-		{
-			perror("fork");
-			exit(EXIT_FAILURE);
-		}
-		if (pid == 0)
-		{
-			if (execve(tokens[0], tokens, NULL) == -1)
-			{
-				perror("execve");
-				free(buffer);
-				free(tokens);
-				exit(EXIT_FAILURE);
-			}
-		}
-		else
-		{
-			wait(&status);
-		}
+		execute_cmd(tokens, buffer);
 		i = 0;
 		free(tokens);
 		tokens = NULL;
 	}
 	free(buffer);
-
 	return (0);
 }

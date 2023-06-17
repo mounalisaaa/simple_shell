@@ -8,5 +8,6 @@
 #include <sys/wait.h>
 #include <stdbool.h>
 
+void execute_cmd(char **tokens, char *buffer);
 
 #endif
