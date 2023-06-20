@@ -4,7 +4,7 @@ int main(void)
 {
 	char *buffer = NULL;
 	size_t buffer_size = 0;
-	char *token, **tokens = NULL;
+	char *token = NULL, **tokens= NULL;
 	const char *delim = " \t\n";
 	bool run = true;
 	int i = 0;
@@ -12,7 +12,7 @@ int main(void)
 	while (run)
 	{
 		if (isatty(STDIN_FILENO))
-			printf("#cisfun$ ");
+			write(1, "#cisfun$ ", 9);
 		else
 			run = false;
 		if ((getline(&buffer, &buffer_size, stdin)) == -1)
