@@ -9,7 +9,7 @@
 #include <stdbool.h>
 #include <sys/stat.h>
 
-void execute_cmd(char **tokens, char *buffer);
+void execute_cmd(char **tokens);
 char *_getenv(const char *name);
 char *get_cmd(char *command);
 int _strlen(char *str);

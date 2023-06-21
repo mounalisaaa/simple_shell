@@ -1,14 +1,16 @@
 #include "shell.h"
 
-int main(void)
+int main(int ac, char **av)
 {
 	char *buffer = NULL;
 	size_t buffer_size = 0;
-	char *token = NULL, **tokens= NULL;
+	char *token = NULL; //**tokens = NULL;
+	char *buffer_copy = NULL;
 	const char *delim = " \t\n";
 	bool run = true;
-	int i = 0;
+	int i = 0, j = 0;
 
+	(void)ac;
 	while (run)
 	{
 		if (isatty(STDIN_FILENO))
@@ -21,25 +23,39 @@ int main(void)
 			free(buffer);
 			exit(EXIT_FAILURE);
 		}
+		buffer_copy = strdup(buffer);
 		token = strtok(buffer, delim);
 		while (token)
 		{
-			tokens = realloc(tokens, sizeof(char *) * (i + 1));
-			if (!tokens)
-			{
-				perror("realloc");
-				free(buffer);
-				exit(EXIT_FAILURE);
-			}
-			tokens[i] = token;
-			token = strtok(NULL, delim);
 			i++;
+			token = strtok(NULL, delim);
+			// tokens = realloc(tokens, sizeof(char *) * (i + 1));
+			// if (!tokens)
+			// {
+			// 	perror("realloc");
+			// 	free(buffer);
+			// 	exit(EXIT_FAILURE);
+			// }
+			// tokens[i] = token;
+			// token = strtok(NULL, delim);
+			// i++;
 		}
-		execute_cmd(tokens, buffer);
-		i = 0;
-		free(tokens);
-		tokens = NULL;
+		i++;
+		av = malloc(sizeof(char *) * i);
+		token = strtok(buffer_copy, delim);
+		while (token)
+		{
+			av[i] = malloc(sizeof(char *) * strlen(token));
+			strcpy(av[i], token);
+		}
+		av[i] = NULL;
+		// execute_cmd(arr);
+		free(av);
+		free(buffer_copy);
+		free(buffer);
+		// tokens = NULL;
 	}
-	free(buffer);
+	// free(buffer_copy);
+	// free(buffer);
 	return (0);
 }

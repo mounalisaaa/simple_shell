@@ -1,13 +1,13 @@
 #include "shell.h"
 extern char **environ;
 
-void execute_cmd(char **tokens, char *buffer)
+void execute_cmd(char **tokens)
 {
 	int status;
-	char *arr[]= {"ls", "-ls"};
 	char *cmd = NULL;
 	pid_t pid;
 	pid = fork();
+	cmd = get_cmd(tokens[0]);
 	if (pid == -1)
 	{
 		perror("fork");
@@ -15,20 +15,17 @@ void execute_cmd(char **tokens, char *buffer)
 	}
 	else if (pid == 0)
 	{
-		//cmd = get_cmd(tokens[0]);
-		if (execve("ls", arr, NULL) == -1)
+		if (execve(cmd, tokens, NULL) == -1)
 		{
 			perror("execve");
-			free(buffer);
 			free(tokens);
 			exit(EXIT_FAILURE);
 		}
 	}
-	
-	// else
-	// {
-	// 	wait(&status);
-	// }
+	else
+	{
+		wait(&status);
+	}
 }
 
 char *_getenv(const char *name)
