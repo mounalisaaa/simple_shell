@@ -1,24 +1,43 @@
 #include "shell.h"
+
 extern char **environ;
 
-void execute_cmd(char **tokens)
+void free_av(char **av)
+{
+	int i = 0;
+	while (av[i])
+	{
+		free(av[i]);
+		i++;
+	}
+}
+void execute_cmd(char **av, char *buff)
 {
 	int status;
-	char *cmd = NULL;
 	pid_t pid;
+	char *cmd = NULL;
 	pid = fork();
-	cmd = get_cmd(tokens[0]);
+	// cmd = get_cmd(av[0]);
+	// if (cmd == NULL)
+	// {
+	// 	_puts("command not found");
+	// 	// free(cmd);
+	// // }
+	// else
+	// {
 	if (pid == -1)
 	{
 		perror("fork");
 		exit(EXIT_FAILURE);
 	}
-	else if (pid == 0)
+	if (pid == 0)
 	{
-		if (execve(cmd, tokens, NULL) == -1)
+		cmd = get_cmd(av[0]);
+		if (execve(cmd, av, environ) == -1)
 		{
 			perror("execve");
-			free(tokens);
+			free_av(av);
+			free(buff);
 			exit(EXIT_FAILURE);
 		}
 	}
@@ -56,7 +75,7 @@ char *get_cmd(char *command)
 
 		while (path_token)
 		{
-			directory_length = strlen(path_token);
+			directory_length = _strlen(path_token);
 			file_path = malloc(command_length + directory_length + 2);
 			_strcpy(file_path, path_token);
 			_strcat(file_path, "/");
