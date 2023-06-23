@@ -21,5 +21,6 @@ void free_av(char **av);
 char *_strncpy(char *dest, char *src, int n);
 void _puts(char *str);
 int _putchar(char c);
+ssize_t read_user_input(char **userInput_buf, size_t *buf_size);
 
 #endif

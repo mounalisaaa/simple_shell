@@ -7,6 +7,7 @@ int main(int ac, char **av)
 	const char *delim = " \t\n";
 	size_t buffer_size = 0, token_len;
 	int count;
+	ssize_t rn;
 	char *tokens[100] = {0}, *token = NULL;
 
 	while (run)
@@ -15,12 +16,24 @@ int main(int ac, char **av)
 			write(1, "#cisfun$ ", 9);
 		else
 			run = false;
-		if ((getline(&buffer, &buffer_size, stdin)) == -1)
+		if ((rn = getline(&buffer, &buffer_size, stdin)) == -1) ////men hna 
 		{
-			perror("getline");
+			if (!isatty(STDIN_FILENO))
+			{
+				free(buffer);
+				break;
+			}
+			perror("getline"); 
 			free(buffer);
 			exit(EXIT_FAILURE);
 		}
+		if ((*buffer + rn - 2) == '\n')
+			*(buffer + rn - 2) = '\0';
+		if (buffer[0] == '\0')
+		{
+			free(buffer);
+			continue;
+		}                                        /// hta l hna 
 		buffer_copy = _strdup(buffer);
 		token = strtok(buffer_copy, delim);
 		for (count = 0; token; count++)

@@ -17,14 +17,6 @@ void execute_cmd(char **av, char *buff)
 	pid_t pid;
 	char *cmd = NULL;
 	pid = fork();
-	// cmd = get_cmd(av[0]);
-	// if (cmd == NULL)
-	// {
-	// 	_puts("command not found");
-	// 	// free(cmd);
-	// // }
-	// else
-	// {
 	if (pid == -1)
 	{
 		perror("fork");
@@ -32,8 +24,7 @@ void execute_cmd(char **av, char *buff)
 	}
 	if (pid == 0)
 	{
-		cmd = get_cmd(av[0]);
-		if (execve(cmd, av, environ) == -1)
+		if (execve(av[0], av, environ) == -1)
 		{
 			perror("execve");
 			free_av(av);
@@ -102,3 +93,23 @@ char *get_cmd(char *command)
 
 	return (NULL);
 }
+// ssize_t read_user_input(char **buf, size_t *buf_size)
+// {
+// 	ssize_t rn;
+
+// 	rn = getline(buf, buf_size, stdin);
+// 	if (rn == -1)
+// 	{
+// 		if (!isatty(STDIN_FILENO))
+// 			return (-1);
+// 		free(buff);
+// 		perror("getline");
+// 		exit(EXIT_FAILURE);
+// 	}
+// 	if ((*buff)[rn - 1] == '\n')
+// 		(*buff)[rn - 1] = '\0';
+
+// 	buff = NULL;
+
+// 	return (rn);
+// }
