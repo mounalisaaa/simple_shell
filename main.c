@@ -16,24 +16,21 @@ int main(int ac, char **av)
 			write(1, "#cisfun$ ", 9);
 		else
 			run = false;
-		if ((rn = getline(&buffer, &buffer_size, stdin)) == -1) ////men hna 
+		if ((rn = getline(&buffer, &buffer_size, stdin)) == -1)
 		{
 			if (!isatty(STDIN_FILENO))
 			{
 				free(buffer);
 				break;
 			}
-			perror("getline"); 
+			perror("getline");
 			free(buffer);
 			exit(EXIT_FAILURE);
 		}
-		if ((*buffer + rn - 2) == '\n')
-			*(buffer + rn - 2) = '\0';
-		if (buffer[0] == '\0')
-		{
-			free(buffer);
+		if (*buffer == '\n' || (*buffer == ' ' || *buffer == '\t'))
 			continue;
-		}                                        /// hta l hna 
+		// if (buffer[rn - 1] == '\n')
+		// 	buffer[rn - 1] = '\0';
 		buffer_copy = _strdup(buffer);
 		token = strtok(buffer_copy, delim);
 		for (count = 0; token; count++)

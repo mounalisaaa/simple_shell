@@ -8,6 +8,7 @@
 #include <sys/wait.h>
 #include <stdbool.h>
 #include <sys/stat.h>
+#include <ctype.h>
 
 void execute_cmd(char **av, char *buff);
 char *_getenv(const char *name);
@@ -21,6 +22,8 @@ void free_av(char **av);
 char *_strncpy(char *dest, char *src, int n);
 void _puts(char *str);
 int _putchar(char c);
-ssize_t read_user_input(char **userInput_buf, size_t *buf_size);
+// ssize_t read_user_input(char **userInput_buf, size_t *buf_size);
+int check_spaces_tabs(char *str);
+int check_spaces_around_command(char *input);
 
 #endif

@@ -16,6 +16,12 @@ void execute_cmd(char **av, char *buff)
 	int status;
 	pid_t pid;
 	char *cmd = NULL;
+	cmd = get_cmd(av[0]);
+	if (!cmd)
+	{
+		printf("%s: Command not found\n", av[0]);
+		return;
+	}
 	pid = fork();
 	if (pid == -1)
 	{
@@ -24,7 +30,7 @@ void execute_cmd(char **av, char *buff)
 	}
 	if (pid == 0)
 	{
-		if (execve(av[0], av, environ) == -1)
+		if (execve(cmd, av, environ) == -1)
 		{
 			perror("execve");
 			free_av(av);
@@ -36,6 +42,8 @@ void execute_cmd(char **av, char *buff)
 	{
 		wait(&status);
 	}
+	if (strcmp(cmd, av[0]) != 0)
+		free(cmd);
 }
 
 char *_getenv(const char *name)
@@ -56,7 +64,7 @@ char *get_cmd(char *command)
 	char *path, *path_copy, *path_token, *file_path;
 	int command_length, directory_length;
 	struct stat buffer;
-	path = _getenv("PATH");
+	path = getenv("PATH");
 
 	if (path)
 	{
@@ -93,11 +101,11 @@ char *get_cmd(char *command)
 
 	return (NULL);
 }
-// ssize_t read_user_input(char **buf, size_t *buf_size)
+// ssize_t read_user_input(char **buff, size_t *buf_size)
 // {
 // 	ssize_t rn;
 
-// 	rn = getline(buf, buf_size, stdin);
+// 	rn = getline(buff, buf_size, stdin);
 // 	if (rn == -1)
 // 	{
 // 		if (!isatty(STDIN_FILENO))
