@@ -10,6 +10,8 @@
 #include <sys/stat.h>
 #include <ctype.h>
 
+extern char **environ;
+
 void execute_cmd(char **av, char *buff);
 char *_getenv(char *name);
 char *get_cmd(char *command);
@@ -32,5 +34,6 @@ int exit_func(char **tokens, char *buffer);
 int _strncmp(const char *s1, const char *s2, size_t n);
 int _setenv(const char *name, const char *value, int overwrite);
 int _unsetenv(char *name);
+void tokenize(char *buffer, char **tokens);
 
 #endif
