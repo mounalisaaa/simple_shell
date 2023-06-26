@@ -1,6 +1,6 @@
 #include "shell.h"
 
-int main(int ac, char **av)
+int main(int argc, char **argv)
 {
 	bool run = true;
 	char *buffer = NULL, *buffer_copy = NULL;
@@ -29,8 +29,6 @@ int main(int ac, char **av)
 		}
 		if (*buffer == '\n' || (*buffer == ' ' || *buffer == '\t'))
 			continue;
-		// if (buffer[rn - 1] == '\n')
-		// 	buffer[rn - 1] = '\0';
 		buffer_copy = _strdup(buffer);
 		token = strtok(buffer_copy, delim);
 		for (count = 0; token; count++)

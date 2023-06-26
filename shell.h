@@ -11,7 +11,7 @@
 #include <ctype.h>
 
 void execute_cmd(char **av, char *buff);
-char *_getenv(const char *name);
+char *_getenv(char *name);
 char *get_cmd(char *command);
 int _strlen(char *str);
 char *_strcat(char *dest, char *src);
@@ -25,5 +25,12 @@ int _putchar(char c);
 // ssize_t read_user_input(char **userInput_buf, size_t *buf_size);
 int check_spaces_tabs(char *str);
 int check_spaces_around_command(char *input);
+int handle_builtin(char **tokens, char *buffer);
+int env_func(void);
+int _strcmp(char *s1, char *s2);
+int exit_func(char **tokens, char *buffer);
+int _strncmp(const char *s1, const char *s2, size_t n);
+int _setenv(const char *name, const char *value, int overwrite);
+int _unsetenv(char *name);
 
 #endif

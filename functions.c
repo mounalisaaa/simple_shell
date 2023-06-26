@@ -16,45 +16,47 @@ void execute_cmd(char **av, char *buff)
 	int status;
 	pid_t pid;
 	char *cmd = NULL;
-	cmd = get_cmd(av[0]);
-	if (!cmd)
+	if ((handle_builtin(av, buff)) == -1)
 	{
-		printf("%s: Command not found\n", av[0]);
-		return;
-	}
-	pid = fork();
-	if (pid == -1)
-	{
-		perror("fork");
-		exit(EXIT_FAILURE);
-	}
-	if (pid == 0)
-	{
-		if (execve(cmd, av, environ) == -1)
+		cmd = get_cmd(av[0]);
+		if (!cmd)
 		{
-			perror("execve");
-			free_av(av);
-			free(buff);
+			_puts("Command not found"); // WA 3NDAK TNSAYY HADI
+			return;
+		}
+		pid = fork();
+		if (pid == -1)
+		{
+			perror("fork");
 			exit(EXIT_FAILURE);
 		}
+		if (pid == 0)
+		{
+			if (execve(cmd, av, environ) == -1)
+			{
+				perror("execve");
+				free_av(av);
+				free(buff);
+				exit(EXIT_FAILURE);
+			}
+		}
+		else
+		{
+			wait(&status);
+		}
+		if (strcmp(cmd, av[0]) != 0)
+			free(cmd);
 	}
-	else
-	{
-		wait(&status);
-	}
-	if (strcmp(cmd, av[0]) != 0)
-		free(cmd);
 }
 
-char *_getenv(const char *name)
+char *_getenv(char *name)
 {
 	int i = 0;
-	char *var_name;
-	for (i = 0; environ[i]; i++)
+	ssize_t len = _strlen(name);
+	for (; environ[i]; i++)
 	{
-		var_name = strtok(environ[i + 1], "=");
-		if (strcmp(var_name, name) == 0)
-			return (strtok(NULL, "="));
+		if (strncmp(environ[i], name, len) == 0 && environ[i][len] == '=')
+			return (&environ[i][len + 1]);
 	}
 	return (NULL);
 }
@@ -64,7 +66,7 @@ char *get_cmd(char *command)
 	char *path, *path_copy, *path_token, *file_path;
 	int command_length, directory_length;
 	struct stat buffer;
-	path = getenv("PATH");
+	path = _getenv("PATH");
 
 	if (path)
 	{
@@ -101,23 +103,3 @@ char *get_cmd(char *command)
 
 	return (NULL);
 }
-// ssize_t read_user_input(char **buff, size_t *buf_size)
-// {
-// 	ssize_t rn;
-
-// 	rn = getline(buff, buf_size, stdin);
-// 	if (rn == -1)
-// 	{
-// 		if (!isatty(STDIN_FILENO))
-// 			return (-1);
-// 		free(buff);
-// 		perror("getline");
-// 		exit(EXIT_FAILURE);
-// 	}
-// 	if ((*buff)[rn - 1] == '\n')
-// 		(*buff)[rn - 1] = '\0';
-
-// 	buff = NULL;
-
-// 	return (rn);
-// }
