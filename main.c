@@ -39,5 +39,5 @@ int main(int argc, char **argv)
 		buffer_size = 0;
 	}
 	free(buffer);
-	return (0);
+	return (status);
 }

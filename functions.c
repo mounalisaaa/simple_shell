@@ -12,7 +12,6 @@ void free_av(char **av)
 }
 int execute_cmd(char **av, char *buff)
 {
-	int status;
 	pid_t pid;
 	char *cmd = NULL;
 	int eexit = handle_builtin(av, buff);
@@ -23,7 +22,7 @@ int execute_cmd(char **av, char *buff)
 		if (!cmd)
 		{
 			_puts("Command not found"); /*WA 3NDAK TNSAYY HADI*/
-			return (0);
+			return (2);
 		}
 		pid = fork();
 		if (pid == -1)
@@ -38,12 +37,14 @@ int execute_cmd(char **av, char *buff)
 				perror("execve");
 				free_av(av);
 				free(buff);
-				exit(EXIT_FAILURE);
+				exit(2);
 			}
 		}
 		else
 		{
-			wait(&status);
+			waitpid(pid, &eexit, 0);
+			if (eexit != 0)
+				eexit = 2;
 		}
 		if (_strcmp(cmd, av[0]) != 0)
 			free(cmd);
