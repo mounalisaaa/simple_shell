@@ -26,9 +26,34 @@ int env_func(void)
 }
 int exit_func(char **tokens, char *buffer)
 {
+	int i = 0;
+	int existatus = 0;
+	while (tokens[i])
+		i++;
+	if (i > 1)
+	{
+		if (valid_num(tokens[1]))
+			existatus = atoi(tokens[1]);
+		else
+		{
+			fprintf(stderr, "Error: invalid exit status\n");
+			existatus = 2;
+		}
+	}
 	free_av(tokens);
 	free(buffer);
-	exit(0);
-
+	exit(existatus);
 	return (0);
+}
+int valid_num(char *args)
+{
+	if (args[0] == '-')
+		args++;
+	while (*args)
+	{
+		if (!isdigit(*args))
+			return (0);
+		args++;
+	}
+	return (1);
 }
