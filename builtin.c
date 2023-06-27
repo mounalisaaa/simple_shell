@@ -38,7 +38,7 @@ int exit_func(char **tokens, char *buffer)
 	}
 	if (_atoi(tokens[1]) == -1)
 	{
-		fprintf(stderr, "Error: invalid exit status\n");
+		fprintf(stderr, "./hsh: 1: exit: Illegal number: -98\n");
 		return (2);
 	}
 	existatus = atoi(tokens[1]);
