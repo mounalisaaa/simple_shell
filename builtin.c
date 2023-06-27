@@ -1,5 +1,10 @@
 #include "shell.h"
-
+/**
+ * handle_builtin - handle builtin commands
+ *@tokens: tokens
+ *@buffer: buffer
+ * Return: int
+ */
 int handle_builtin(char **tokens, char *buffer)
 {
 	if (_strcmp(tokens[0], "exit") == 0)
@@ -15,6 +20,11 @@ int handle_builtin(char **tokens, char *buffer)
 	else
 		return (-1);
 }
+/**
+ * env_func - get the env
+ *
+ * Return: Always 0
+ */
 int env_func(void)
 {
 	int i;
@@ -24,10 +34,17 @@ int env_func(void)
 
 	return (0);
 }
+/**
+ * exit_func - does the exiting
+ *@tokens: tokens
+ *@buffer: buffer
+ * Return: integer
+ */
 int exit_func(char **tokens, char *buffer)
 {
 	int i = 0;
 	int existatus = 0;
+
 	while (tokens[i])
 		i++;
 	if (i == 1)
@@ -69,3 +86,4 @@ int _atoi(char *nptr)
 
 	return (n);
 }
+

@@ -1,5 +1,9 @@
 #include "shell.h"
-
+/**
+ *  _strlen -  calculates the length of a string.
+ * @str: pointer to a string.
+ * Return: i.
+ */
 int _strlen(char *str)
 {
 	int i = 0;

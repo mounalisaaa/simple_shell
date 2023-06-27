@@ -1,5 +1,9 @@
 #include "shell.h"
-
+/**
+ * free_av - free the tokens
+ *
+ * @av: tokens
+ */
 void free_av(char **av)
 {
 	int i = 0;
@@ -10,6 +14,12 @@ void free_av(char **av)
 		i++;
 	}
 }
+/**
+ * execute_cmd - exeutes dommands
+ *@av: tokens
+ * @buff: buffer
+ * Return: eexit
+ */
 int execute_cmd(char **av, char *buff)
 {
 	pid_t pid;
@@ -51,7 +61,11 @@ int execute_cmd(char **av, char *buff)
 	}
 	return (eexit);
 }
-
+/**
+ * _getenv - get the env
+ * @name: name of the env
+ * Return: ptr
+ */
 char *_getenv(char *name)
 {
 	int i = 0;
@@ -64,7 +78,11 @@ char *_getenv(char *name)
 	}
 	return (NULL);
 }
-
+/**
+ * get_cmd - fun that look for cmd
+ * @command: cmd
+ * Return: ptr
+ */
 char *get_cmd(char *command)
 {
 	char *path, *path_copy, *path_token, *file_path;
@@ -107,6 +125,12 @@ char *get_cmd(char *command)
 
 	return (NULL);
 }
+/**
+ * tokenize - parsing
+ * @buffer: buffer
+ * @tokens: tokens
+ *
+ */
 void tokenize(char *buffer, char **tokens)
 {
 	size_t token_len;
