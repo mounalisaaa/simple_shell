@@ -10,19 +10,20 @@ void free_av(char **av)
 		i++;
 	}
 }
-void execute_cmd(char **av, char *buff)
+int execute_cmd(char **av, char *buff)
 {
 	int status;
 	pid_t pid;
 	char *cmd = NULL;
+	int eexit = handle_builtin(av, buff);
 
-	if ((handle_builtin(av, buff)) == -1)
+	if (eexit == -1)
 	{
 		cmd = get_cmd(av[0]);
 		if (!cmd)
 		{
 			_puts("Command not found"); /*WA 3NDAK TNSAYY HADI*/
-			return;
+			return (0);
 		}
 		pid = fork();
 		if (pid == -1)
@@ -44,9 +45,10 @@ void execute_cmd(char **av, char *buff)
 		{
 			wait(&status);
 		}
-		if (strcmp(cmd, av[0]) != 0)
+		if (_strcmp(cmd, av[0]) != 0)
 			free(cmd);
 	}
+	return (eexit);
 }
 
 char *_getenv(char *name)

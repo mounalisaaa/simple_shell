@@ -3,6 +3,7 @@
 int main(int argc, char **argv)
 {
 	bool run = true;
+	int status = 0;
 	char *buffer = NULL;
 	size_t buffer_size = 0;
 	ssize_t rn;
@@ -26,12 +27,12 @@ int main(int argc, char **argv)
 			}
 			perror("getline");
 			free(buffer);
-			exit(EXIT_FAILURE);
+			exit(status);
 		}
 		if (*buffer == '\n' || (*buffer == ' ' || *buffer == '\t'))
 			continue;
 		tokenize(buffer, tokens);
-		execute_cmd(tokens, buffer);
+		status = execute_cmd(tokens, buffer);
 		free_av(tokens);
 		free(buffer);
 		buffer = NULL;

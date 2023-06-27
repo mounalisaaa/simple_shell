@@ -12,7 +12,7 @@
 
 extern char **environ;
 
-void execute_cmd(char **av, char *buff);
+int execute_cmd(char **av, char *buff);
 char *_getenv(char *name);
 char *get_cmd(char *command);
 int _strlen(char *str);

@@ -30,20 +30,21 @@ int exit_func(char **tokens, char *buffer)
 	int existatus = 0;
 	while (tokens[i])
 		i++;
-	if (i > 1)
+	if (i == 1)
 	{
 		if (valid_num(tokens[1]))
 			existatus = atoi(tokens[1]);
+
 		else
 		{
 			fprintf(stderr, "Error: invalid exit status\n");
 			existatus = 2;
+			return (existatus);
 		}
 	}
 	free_av(tokens);
 	free(buffer);
 	exit(existatus);
-	return (0);
 }
 int valid_num(char *args)
 {
