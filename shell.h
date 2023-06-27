@@ -34,5 +34,6 @@ int _strncmp(const char *s1, const char *s2, size_t n);
 int _setenv(const char *name, const char *value, int overwrite);
 int _unsetenv(char *name);
 void tokenize(char *buffer, char **tokens);
+int valid_num(char *args);
 
 #endif
