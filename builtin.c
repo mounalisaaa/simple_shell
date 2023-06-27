@@ -32,29 +32,40 @@ int exit_func(char **tokens, char *buffer)
 		i++;
 	if (i == 1)
 	{
-		if (valid_num(tokens[1]))
-			existatus = atoi(tokens[1]);
-
-		else
-		{
-			fprintf(stderr, "Error: invalid exit status\n");
-			existatus = 2;
-			return (existatus);
-		}
+		free_av(tokens);
+		free(buffer);
+		exit(0);
 	}
+	if (_atoi(tokens[1]) == -1)
+	{
+		fprintf(stderr, "Error: invalid exit status\n");
+		return (2);
+	}
+	existatus = atoi(tokens[1]);
 	free_av(tokens);
 	free(buffer);
 	exit(existatus);
 }
-int valid_num(char *args)
+/**
+ * _atoi - converts string to an integer
+ * @nptr: string to be converted
+ * Return: converted integer value or -1
+ */
+int _atoi(char *nptr)
 {
-	if (args[0] == '-')
-		args++;
-	while (*args)
+	int i = 0, n = 0;
+
+	if (nptr[i] == '+')
+		i++;
+
+	while (nptr[i])
 	{
-		if (!isdigit(*args))
-			return (0);
-		args++;
+		if (nptr[i] < '0' || nptr[i] > '9')
+			return (-1);
+
+		n = (n * 10) + (nptr[i] - '0');
+		i++;
 	}
-	return (1);
+
+	return (n);
 }
