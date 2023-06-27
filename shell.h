@@ -10,7 +10,9 @@
 #include <sys/stat.h>
 #include <ctype.h>
 
-void execute_cmd(char **av, char *buff);
+extern char **environ;
+
+int execute_cmd(char **av, char *buff);
 char *_getenv(char *name);
 char *get_cmd(char *command);
 int _strlen(char *str);
@@ -22,7 +24,6 @@ void free_av(char **av);
 char *_strncpy(char *dest, char *src, int n);
 void _puts(char *str);
 int _putchar(char c);
-// ssize_t read_user_input(char **userInput_buf, size_t *buf_size);
 int check_spaces_tabs(char *str);
 int check_spaces_around_command(char *input);
 int handle_builtin(char **tokens, char *buffer);
@@ -32,5 +33,7 @@ int exit_func(char **tokens, char *buffer);
 int _strncmp(const char *s1, const char *s2, size_t n);
 int _setenv(const char *name, const char *value, int overwrite);
 int _unsetenv(char *name);
+void tokenize(char *buffer, char **tokens);
+int _atoi(char *nptr);
 
 #endif

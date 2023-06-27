@@ -1,28 +1,28 @@
 #include "shell.h"
 
-extern char **environ;
-
 void free_av(char **av)
 {
 	int i = 0;
+
 	while (av[i])
 	{
 		free(av[i]);
 		i++;
 	}
 }
-void execute_cmd(char **av, char *buff)
+int execute_cmd(char **av, char *buff)
 {
-	int status;
 	pid_t pid;
 	char *cmd = NULL;
-	if ((handle_builtin(av, buff)) == -1)
+	int eexit = handle_builtin(av, buff);
+
+	if (eexit == -1)
 	{
 		cmd = get_cmd(av[0]);
 		if (!cmd)
 		{
-			_puts("Command not found"); // WA 3NDAK TNSAYY HADI
-			return;
+			_puts("Command not found"); /*WA 3NDAK TNSAYY HADI*/
+			return (2);
 		}
 		pid = fork();
 		if (pid == -1)
@@ -37,22 +37,26 @@ void execute_cmd(char **av, char *buff)
 				perror("execve");
 				free_av(av);
 				free(buff);
-				exit(EXIT_FAILURE);
+				exit(2);
 			}
 		}
 		else
 		{
-			wait(&status);
+			waitpid(pid, &eexit, 0);
+			if (eexit != 0)
+				eexit = 2;
 		}
-		if (strcmp(cmd, av[0]) != 0)
+		if (_strcmp(cmd, av[0]) != 0)
 			free(cmd);
 	}
+	return (eexit);
 }
 
 char *_getenv(char *name)
 {
 	int i = 0;
 	ssize_t len = _strlen(name);
+
 	for (; environ[i]; i++)
 	{
 		if (strncmp(environ[i], name, len) == 0 && environ[i][len] == '=')
@@ -66,8 +70,8 @@ char *get_cmd(char *command)
 	char *path, *path_copy, *path_token, *file_path;
 	int command_length, directory_length;
 	struct stat buffer;
-	path = _getenv("PATH");
 
+	path = _getenv("PATH");
 	if (path)
 	{
 		path_copy = _strdup(path);
@@ -102,4 +106,23 @@ char *get_cmd(char *command)
 	}
 
 	return (NULL);
+}
+void tokenize(char *buffer, char **tokens)
+{
+	size_t token_len;
+	const char *delim = " \t\n";
+	char *token = NULL;
+	int count = 0;
+	char *buffer_copy = NULL;
+
+	buffer_copy = _strdup(buffer);
+	token = strtok(buffer_copy, delim);
+	for (count = 0; token; count++)
+	{
+		token_len = _strlen(token);
+		tokens[count] = malloc(sizeof(char *) * token_len);
+		_strncpy(tokens[count], token, token_len + 1);
+		token = strtok(NULL, delim);
+	}
+	free(buffer_copy);
 }
